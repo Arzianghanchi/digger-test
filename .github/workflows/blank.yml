@@ -1,0 +1,23 @@
+# .github/workflows/digger.yml
+
+name: Digger Terraform Workflow
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  digger:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Run Digger
+        uses: diggerhq/digger@v0.4.28
+        with:
+          digger-hostname: http://b95b-223-185-42-217.ngrok-free.app # replace with your actual URL if using local Digger
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
