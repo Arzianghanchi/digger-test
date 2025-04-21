@@ -1,15 +1,37 @@
+traverse_to_nested_projects: true
+auto_merge: false
+pr_locks: false
 projects:
-  - name: default
-    path: .
-    terraform_working_dir: .
-    workflow: default
-
+  - name: default 
+    dir: .
+    workspace: default
+    terragrunt: false
+    workflow: staging  
+generate_projects:
+  include: "../projects/**"
+  exclude: "../.terraform/**"
 workflows:
-  default:
+  staging:
+    env_vars:
+      state:
+        - name: aws-role-to-assume
+          value: arn:aws:iam::924144197303:role/arziandiggercicd
+      commands:
+        - name: aws-role-to-assume
+          value: arn:aws:iam::924144197303:role/arziandiggercicd
     plan:
       steps:
-        - run: terraform init
-        - run: terraform plan
+        - init:
+          extra_args: ["backend-config=../backend.hcl"]
+        - run: "echo hello world"
+        - plan
     apply:
       steps:
-        - run: terraform apply -auto-approve
+        - run: "echo hello world"
+          shell: zsh
+        - init
+        - apply:
+          extra_args: ["-compact-warnings"]
+    workflow_configuration:
+      on_pull_request_pushed: ["digger plan"]
+      on_pull_request_closed: ["digger unlock"]
