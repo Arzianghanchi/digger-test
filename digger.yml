@@ -19,6 +19,7 @@ workflows:
       commands:
         - name: aws-role-to-assume
           value: arn:aws:iam::924144197303:role/diggercicd
+
     plan:
       steps:
         - init:
