@@ -1,28 +1,37 @@
-name: digger
-
-on:
-  pull_request:
-    branches:
-      - main
-
-jobs:
-  terraform:
-    name: Digger Terraform Plan
-    runs-on: ubuntu-latest
-
-    permissions:
-      contents: read
-      pull-requests: write
-      id-token: write
-
-    steps:
-      - name: Run Digger
-        uses: diggerhq/digger@v0.4.28
-        with:
-          setup-terraform: true
-          terraform-version: v1.6.6
-          digger-hostname: https://b95b-223-185-42-217.ngrok-free.app
-          disable-locking: true
-        env:
-          GITHUB_CONTEXT: ${{ toJson(github) }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+traverse_to_nested_projects: true
+auto_merge: false
+pr_locks: false
+projects:
+  - name: default 
+    dir: .
+    workspace: default
+    terragrunt: false
+    workflow: staging  
+generate_projects:
+  include: "../projects/**"
+  exclude: "../.terraform/**"
+workflows:
+  staging:
+    env_vars:
+      state:
+        - name: aws-role-to-assume
+          value: arn:aws:iam::924144197303:role/arziandiggercicd
+      commands:
+        - name: aws-role-to-assume
+          value: arn:aws:iam::924144197303:role/arziandiggercicd
+    plan:
+      steps:
+        - init:
+          extra_args: ["backend-config=../backend.hcl"]
+        - run: "echo hello world"
+        - plan
+    apply:
+      steps:
+        - run: "echo hello world"
+          shell: zsh
+        - init
+        - apply:
+          extra_args: ["-compact-warnings"]
+    workflow_configuration:
+      on_pull_request_pushed: ["digger plan"]
+      on_pull_request_closed: ["digger unlock"]
