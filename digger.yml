@@ -12,4 +12,4 @@ workflows:
         - run: terraform plan
       env:
         GITHUB_CONTEXT: ${{ toJson(github) }}
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: GITHUB_TOKEN
