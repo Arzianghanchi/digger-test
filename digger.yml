@@ -1,0 +1,15 @@
+projects:
+  - name: default
+    path: .
+    terraform_working_dir: .
+    workflow: default
+
+workflows:
+  default:
+    plan:
+      steps:
+        - run: terraform init
+        - run: terraform plan
+    apply:
+      steps:
+        - run: terraform apply -auto-approve
