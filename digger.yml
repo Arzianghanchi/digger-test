@@ -1,15 +1,28 @@
-projects:
-  - name: default
-    path: .
-    terraform_working_dir: .
-    workflow: default
+name: digger
 
-workflows:
-  default:
-    plan:
-      steps:
-        - run: terraform init
-        - run: terraform plan
-    env:
-      GITHUB_CONTEXT: ${{ toJson(github) }}
-      GITHUB_TOKEN: GITHUB_TOKEN
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  terraform:
+    name: Digger Terraform Plan
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      pull-requests: write
+      id-token: write
+
+    steps:
+      - name: Run Digger
+        uses: diggerhq/digger@v0.4.28
+        with:
+          setup-terraform: true
+          terraform-version: v1.6.6
+          digger-hostname: https://b95b-223-185-42-217.ngrok-free.app
+          disable-locking: true
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
