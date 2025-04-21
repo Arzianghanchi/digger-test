@@ -1,5 +1,3 @@
-# .github/workflows/digger.yml
-
 name: Digger Terraform Workflow
 
 on:
@@ -20,6 +18,6 @@ jobs:
         with:
           aws-role-to-assume: arn:aws:iam::924144197303:role/diggercicd
           aws-region: us-east-1
-          digger-hostname: http://b95b-223-185-42-217.ngrok-free.app # replace with your actual URL if using local Digger
+          digger-hostname: "cheerful-walrus-mainly.ngrok-free.app" # replace with your actual URL if using local Digger
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
