@@ -15,10 +15,11 @@ workflows:
     env_vars:
       state:
         - name: aws-role-to-assume
-          value: arn:aws:iam::924144197303:role/arziandiggercicd
+          value: arn:aws:iam::924144197303:role/diggercicd
       commands:
         - name: aws-role-to-assume
-          value: arn:aws:iam::924144197303:role/arziandiggercicd
+          value: arn:aws:iam::924144197303:role/diggercicd
+
     plan:
       steps:
         - init:
