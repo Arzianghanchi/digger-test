@@ -10,6 +10,3 @@ workflows:
       steps:
         - run: terraform init
         - run: terraform plan
-    apply:
-      steps:
-        - run: terraform apply -auto-approve
